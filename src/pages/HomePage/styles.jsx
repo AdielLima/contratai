@@ -1,0 +1,296 @@
+// styles.jsx
+import styled, { createGlobalStyle } from "styled-components";
+
+/**
+ * Global styles equivalentes ao que havia
+ * em <style> e resets básicos.
+ */
+export const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0; 
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Roboto", sans-serif;
+    background: #fff;
+    color: #000;
+    overflow-x: hidden;
+  }
+
+  /* ---------- Estilos do container dos "pontinhos" ---------- */
+  .dots-container {
+    width: 90%;
+    max-width: 1200px;
+    height: 200px;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  .dot {
+    opacity: 0;
+    position: absolute;
+    border-radius: 50%;
+    animation-fill-mode: forwards;
+  }
+  @keyframes moveDot {
+    0% {
+      transform: translate(0, 0) scale(0);
+      opacity: 0;
+    }
+    10% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    90% {
+      transform: translate(var(--mx), var(--my)) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--mx), var(--my)) scale(0);
+      opacity: 0;
+    }
+  }
+
+  /* ---------- Slideshow + Modal ---------- */
+  .slideshow-container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: #fff;
+  }
+  .slide {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    position: relative;
+  }
+  .slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: zoom-in;
+  }
+  .arrow-next {
+    position: absolute;
+    top: 50%;
+    right: -80px;
+    transform: translateY(-50%);
+    width: 80px; 
+    height: 80px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .arrow-icon {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+  }
+  .modal-lightbox {
+    display: none; 
+    position: fixed;
+    z-index: 9999;
+    left: 0; 
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+  }
+  .modal-content {
+    display: block;
+    margin: 5% auto; 
+    max-width: 90%;
+    max-height: 80%;
+    border: 3px solid #fff;
+    border-radius: 8px;
+  }
+  .close-modal {
+    position: absolute;
+    top: 20px; 
+    right: 40px;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s;
+  }
+  .close-modal:hover {
+    color: #ccc;
+  }
+  @media (max-width: 600px) {
+    .arrow-next {
+      width: 90px; 
+      height: 90px;
+      right: -90px;
+    }
+    .close-modal {
+      font-size: 32px;
+      right: 20px;
+    }
+  }
+`;
+
+/** 
+ * Containers e elementos básicos 
+ */
+export const PageWrapper = styled.div`
+  /* container principal da página */
+`;
+
+export const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+`;
+
+export const Title = styled.h2`
+  font-size: 2rem;
+  margin: 1rem 0;
+  text-align: center;
+
+  &.titulo-gradiente-vibrante {
+    background: linear-gradient(to right, #47b3e3, #2196f3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+`;
+
+export const Spacer = styled.div`
+  height: ${({ size }) => (size ? size : "2rem")};
+`;
+
+/**
+ * Caixa do “Assistentes Inteligentes”
+ */
+export const AssistenteInteligenteBox = styled.div`
+  max-width: 1600px; 
+  margin: 1rem auto;
+  padding: 1rem;
+  text-align: center;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 1.4rem;
+
+  img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+    animation: spin 6s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .price {
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.9rem 1.8rem;
+    border-radius: 32px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+  .btn:hover {
+    background: #333;
+  }
+
+  ul {
+    list-style: disc outside;
+    display: inline-block;
+    margin: 1rem auto 0;
+    text-align: left;
+  }
+  ul li {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    padding: 1rem;
+    h1 {
+      font-size: 1.6rem;
+    }
+    .price {
+      font-size: 1.4rem;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+    }
+    ul li {
+      font-size: 0.85rem;
+    }
+  }
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    padding: 0.75rem;
+    h1 {
+      font-size: 1.4rem;
+    }
+    .price {
+      font-size: 1.2rem;
+    }
+    .btn {
+      padding: 0.6rem 1rem;
+      border-radius: 24px;
+    }
+    img {
+      width: 80px;
+      height: 80px;
+    }
+    ul li {
+      font-size: 0.8rem;
+      margin-bottom: 0.4rem;
+    }
+  }
+`;
+
+/**
+ * Caixa “Personalizado para o usuário”
+ * (herda estilos da AssistenteInteligenteBox, mas pode sobrescrever)
+ */
+export const PersonalizadoBox = styled(AssistenteInteligenteBox)`
+  p {
+    max-width: 600px;
+    margin: 0.75rem auto 1.5rem auto;
+    line-height: 1.6;
+    color: #333;
+    font-size: 1rem;
+  }
+`;
+
