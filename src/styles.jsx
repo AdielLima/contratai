@@ -1,16 +1,46 @@
 // styles.jsx
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
 
-/**
- * Global styles equivalentes ao que havia
- * em <style> e resets básicos.
- */
+/** Animação do gradiente */
+const vibrateGradient = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`;
+
+/** Declaração dos estilos globais */
 export const GlobalStyle = createGlobalStyle`
+  :root {
+    /* Variáveis globais*/
+    --e-global-color-primary: #FFFFFF;
+    --e-global-color-secondary: #000000;
+    --e-global-color-text: #000000;
+    --e-global-color-accent: #000000;
+    --e-global-color-azul: #55BFFF;
+    --e-global-color-amarelo: #FFE950;
+    --e-global-color-verde: #8EC63F;
+    --e-global-typography-primary-font-family: "Roboto";
+    --e-global-typography-primary-font-weight: 600;
+    --e-global-typography-secondary-font-family: "Roboto Slab";
+    --e-global-typography-secondary-font-weight: 400;
+    --e-global-typography-text-font-family: "Roboto";
+    --e-global-typography-text-font-weight: 400;
+    --e-global-typography-accent-font-family: "Roboto";
+    --e-global-typography-accent-font-weight: 500;
+  }
+
   * {
     margin: 0; 
     padding: 0;
     box-sizing: border-box;
   }
+
   body {
     font-family: "Roboto", sans-serif;
     background: #fff;
@@ -154,17 +184,72 @@ export const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+`; 4
+
+
+export const CtaButton = styled.a`
+  display: block;
+  width: fit-content;/* Mantém a largura de acordo com o conteúdo */
+  margin: 2rem auto;/* Centraliza horizontalmente e adiciona espaçamento vertical */
+  padding: 0.75rem 1.5rem;
+  background: #000;
+  color: #fff;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #333;
+  }
 `;
 
+//imagem centralizada
+export const CenteredImage = styled.img`
+  display: block;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;         /* Centraliza horizontalmente */
+`;
+
+/** Títulos menores (benefícios ou funcionalidades) */
+export const TitleBenefits = styled.h2`
+  font-family: "Roboto", Sans-serif;
+  font-size: 21px;
+  font-weight: 100;
+  line-height: 37px;
+  letter-spacing: 0px;
+  word-spacing: 1px;
+  text-align: center;
+`;
+
+/** Título principal */
 export const Title = styled.h2`
-  font-size: 2rem;
-  margin: 1rem 0;
+  color: #000000;
+  font-family: "Roboto Flex", Sans-serif;
+  font-size: 65px;
+  font-weight: 400;
   text-align: center;
 
   &.titulo-gradiente-vibrante {
-    background: linear-gradient(to right, #47b3e3, #2196f3);
-    -webkit-background-clip: text;
+    font-size: 20px;
+    font-weight: 400;
     -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-image: linear-gradient(
+      135deg,
+      var(--e-global-color-amarelo) 0%,
+      var(--e-global-color-azul) 25%,
+      var(--e-global-color-verde) 50%,
+      var(--e-global-color-azul) 75%,
+      var(--e-global-color-amarelo) 100%
+    );
+    
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: ${vibrateGradient} 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    -webkit-font-smoothing: antialiased;
   }
 `;
 
@@ -293,4 +378,3 @@ export const PersonalizadoBox = styled(AssistenteInteligenteBox)`
     font-size: 1rem;
   }
 `;
-

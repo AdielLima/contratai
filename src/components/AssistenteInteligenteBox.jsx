@@ -1,6 +1,6 @@
 // AssistenteInteligenteBox.jsx
 import React from "react";
-import { AssistenteInteligenteBox } from "../styles";
+import { AssistenteInteligenteBox, CtaButton } from "../styles";
 
 function AssistenteInteligenteBoxComponent() {
   return (
@@ -12,14 +12,7 @@ function AssistenteInteligenteBoxComponent() {
       <h1>Assistentes Inteligentes</h1>
       <div className="price">R$ 130/mês</div>
 
-      <a
-        className="btn"
-        href="https://contratai.org/pagina-de-finalizacao-de-compra?add-to-cart=3670"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Teste grátis 2 dias
-      </a>
+      <CtaButton href="https://contratai.org/pagina-de-finalizacao-de-compra?add-to-cart=3670">Teste grátis por 2 dias</CtaButton>
 
       <ul>
         <li>Inteligência Artificial Generativa Avançada</li>
