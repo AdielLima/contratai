@@ -1,6 +1,8 @@
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import HomePage from "./pages/HomePage";
+import Assistentes from "./pages/Assistentes";
+import { GlobalStyle } from "./styles";
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -20,7 +22,9 @@ function App() {
         // reinicialize estado, chame alguma lógica de limpeza etc.
       }}
     >
-      <HomePage />
+      <GlobalStyle/>
+      {/* <HomePage /> */}
+      <Assistentes/>
     </ErrorBoundary>
   );
 }

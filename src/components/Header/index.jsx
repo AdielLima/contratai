@@ -5,10 +5,11 @@ import Logo from "../../assets/img/logo.webp";
 // Importa os componentes estilizados
 import {
   HeaderContainer,
-  LogoImg,
+  // LogoImg,
   NavBar,
   NavLink
 } from "./styles";
+import { LogoImg } from "../../styles";
 
 function Header() {
   return (

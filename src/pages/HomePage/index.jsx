@@ -1,6 +1,6 @@
 // App.jsx
 import React from "react";
-import { GlobalStyle, PageWrapper, Container, Title, Spacer, TitleBenefits, CtaButton, CenteredImage } from "../../styles";
+import { PageWrapper, Container, Title, Spacer, TitleBenefits, CtaButton, CenteredImage } from "../../styles";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import DotsContainer from "../../components/DotsContainer";
@@ -12,9 +12,6 @@ import telaPc from "../../assets/img/telaComputador.webp"
 function HomePage() {
   return (
     <>
-      {/* Aplica estilos globais */}
-      <GlobalStyle />
-
       <PageWrapper>
         {/* Cabeçalho */}
         <Header />
