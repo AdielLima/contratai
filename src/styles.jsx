@@ -232,7 +232,7 @@ export const Title = styled.h2`
   text-align: center;
 
   &.titulo-gradiente-vibrante {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 400;
     -webkit-text-fill-color: transparent;
     color: transparent;

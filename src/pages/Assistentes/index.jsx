@@ -1,8 +1,8 @@
-import React from "react";
-
-/* IMPORT DOS ÍCONES */
+// Assistentes.jsx
+import React, { useState } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { RiAttachmentLine } from "react-icons/ri";
+import { PiWaveformBold } from "react-icons/pi";
 
 import {
   Container,
@@ -18,60 +18,82 @@ import {
   SearchBox,
   SearchTextArea,
   ActionsInTextArea,
-  ContainerLogoNome
+  ContainerLogoNome,
+  Title,
+  TxtSm,
 } from "./styles";
 
-import Logo from "../../assets/img/logo.webp";
 import { LogoImg } from "../../styles";
 
+import Logo from "../../assets/img/logo.webp";
+
 export default function Assistentes() {
+  const [text, setText] = useState("");
+
+  // Array de itens para o menu
+  const menuItems = [
+    "Função 1",
+    "Função 2",
+    "Função 3",
+    "Função 4",
+    "Função 5",
+    "Função 6",
+    "Função 7",
+    "Função 8",
+    "Função 9",
+  ];
+
+  const handleTextChange = (e) => {
+    setText(e.target.value);
+    // Para o auto-resize do textarea:
+    e.target.style.height = "auto";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  };
+
   return (
     <Container>
-      {/* SIDEBAR */}
       <Sidebar>
         <ContainerLogoNome>
           <LogoImg src={Logo} alt="Logo ContratAI" />
-          <SidebarHeader>ContratAI</SidebarHeader>
+          <SidebarHeader>
+            <Title>ContratAI</Title>
+          </SidebarHeader>
         </ContainerLogoNome>
 
         <SidebarMenu>
-          <MenuItem>Função 1</MenuItem>
-          <MenuItem>Função 2</MenuItem>
-          <MenuItem>Função 3</MenuItem>
-          <MenuItem>Função 4</MenuItem>
-          <MenuItem>Função 5</MenuItem>
-          <MenuItem>Função 6</MenuItem>
-          <MenuItem>Função 7</MenuItem>
-          <MenuItem>Função 8</MenuItem>
-          <MenuItem>Função 9</MenuItem>
+          {menuItems.map((item) => (
+            <MenuItem key={item}>{item}</MenuItem>
+          ))}
         </SidebarMenu>
       </Sidebar>
 
-      {/* MAIN CONTENT */}
       <MainContent>
         <TopBar>
           <TopBarTitle>Como Posso Ajudar?</TopBarTitle>
         </TopBar>
 
-        {/* Campo de input + botões */}
         <ContainerTextArea>
           <SearchBox>
-            <SearchTextArea placeholder="Pergunte alguma coisa" />
+            <SearchTextArea
+              autoFocus
+              placeholder="Pergunte alguma coisa"
+              value={text}
+              onChange={handleTextChange}
+            />
             <ActionsInTextArea>
-              {/* Ícone de Enviar Documento */}
               <SmallButton>
-                <RiAttachmentLine size={18} />
+                <RiAttachmentLine color="white" size={19} />
               </SmallButton>
-
-              {/* Ícone de Enviar Áudio */}
               <SmallButton>
-                <FaMicrophone size={18} />
+                < PiWaveformBold color="white" size={19} />
               </SmallButton>
             </ActionsInTextArea>
           </SearchBox>
         </ContainerTextArea>
-        
-        <p>Para obter uma resposta mais precisa, elabore cuidadosamente a sua pergunta.</p>
+
+        <TxtSm>
+          Para obter uma resposta mais precisa, elabore cuidadosamente a sua pergunta.
+        </TxtSm>
       </MainContent>
     </Container>
   );
