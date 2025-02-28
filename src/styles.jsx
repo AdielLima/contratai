@@ -389,7 +389,7 @@ const spinAnimation = keyframes`
 `;
 
 export const LogoImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: ${({ width = '50px' }) => width};
+  height: ${({ height = '50px' }) => height};
   animation: ${spinAnimation} 6s linear infinite;
 `;
