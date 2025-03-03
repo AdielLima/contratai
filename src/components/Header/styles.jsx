@@ -1,5 +1,5 @@
-// Header.styles.js
 import styled from "styled-components";
+import { vibrateGradient } from "../../styles";
 
 
 export const HeaderContainer = styled.header`
@@ -17,15 +17,18 @@ export const NavBar = styled.nav`
 `;
 
 export const NavLink = styled.a`
-  color: #000;
+  color: #fff;
   text-decoration: none;
-  border: 1px solid #000;
+  border: none;
   border-radius: 15px;
   padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
+  background: linear-gradient(90deg, #55BFFF, #FFE950, #8EC63F);
+  background-size: 300% 300%;
+  animation: ${vibrateGradient} 4s ease infinite;
+  transition: transform 0.3s ease, filter 0.3s ease;
 
-  /* Efeito “hover” para parecer um botão */
   &:hover {
-    background-color: #c2c2c2;
+    filter: brightness(1.1);
+    transform: scale(1.05);
   }
 `;

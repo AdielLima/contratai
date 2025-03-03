@@ -3,6 +3,11 @@ import { ErrorBoundary } from "react-error-boundary";
 import HomePage from "./pages/HomePage";
 import Assistentes from "./pages/Assistentes";
 import { GlobalStyle } from "./styles";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login"
+import Wrapper from "./pages/Wrapper";
+
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -22,10 +27,24 @@ function App() {
         // reinicialize estado, chame alguma lógica de limpeza etc.
       }}
     >
-      <GlobalStyle/>
-      {/* <HomePage /> */}
-      <Assistentes/>
-    </ErrorBoundary>
-  );
+  <GlobalStyle/>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/assistentes"
+          element={
+            // <Wrapper>
+              <Assistentes />
+            // </Wrapper>
+          }
+        />
+      </Routes>
+      </BrowserRouter>
+      </ErrorBoundary>
+  )
+    
 }
 export default App;

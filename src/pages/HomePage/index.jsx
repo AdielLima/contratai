@@ -4,10 +4,10 @@ import { PageWrapper, Container, Title, Spacer, TitleBenefits, CtaButton, Center
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import DotsContainer from "../../components/DotsContainer";
-import Slideshow from "../../components/Slideshow";
-import AssistenteInteligenteBox from "../../components/AssistenteInteligenteBox";
-import PersonalizadoBox from "../../components/PersonalizadoBox";
-import telaPc from "../../assets/img/telaComputador.webp"
+// import Slideshow from "../../components/Slideshow";
+// import AssistenteInteligenteBox from "../../components/AssistenteInteligenteBox";
+// import PersonalizadoBox from "../../components/PersonalizadoBox";
+// import telaPc from "../../assets/img/telaComputador.webp"
 
 function HomePage() {
   return (
@@ -42,7 +42,7 @@ function HomePage() {
 
           <Spacer />
 
-          <CtaButton href="#planos">
+          {/* <CtaButton href="#planos">
             Teste grátis por 2 dias
           </CtaButton>
 
@@ -61,10 +61,10 @@ function HomePage() {
             <li>Analisa e resume documentos</li>
           </ul>
 
-          <Spacer />
+          <Spacer /> */}
 
-          <CtaButton href="#planos">
-            Conheça os planos
+          <CtaButton href="/Register">
+            REGISTRE-SE
           </CtaButton>
 
           <Spacer />
@@ -72,26 +72,30 @@ function HomePage() {
           <Title className="titulo-gradiente-vibrante">
             Diferencial do ContratAI?
           </Title>
+
+          <Spacer />
           <p>
             Com um vasto <strong>banco de dados vetorizado contendo leis,
-              doutrinas, jurisprudências do TCU e modelos da AGU</strong>,
+              doutrinas, jurisprudências do TCU e modelos da AGU,</strong>
             os assistentes inteligentes entregam soluções rápidas,
             fundamentadas e com total segurança jurídica,
             respondendo às suas perguntas em segundos.
           </p>
         </Container>
 
-        <Spacer size="4rem" />
+        <Spacer />
+
+        {/* <Spacer size="4rem" /> */}
 
         {/* Slideshow */}
-        <Container>
+        {/* <Container>
           <Slideshow />
-        </Container>
+        </Container> */}
 
-        <Spacer size="4rem" />
+        {/* <Spacer size="4rem" /> */}
 
         {/* Seção Planos */}
-        <Container id="planos" style={{ textAlign: "center" }}>
+        {/* <Container id="planos" style={{ textAlign: "center" }}>
           <Spacer size="2rem" />
           <h2>Simplifique agora e veja como tudo pode ser mais simples.</h2>
           <Spacer size="2rem" />
@@ -103,7 +107,7 @@ function HomePage() {
           <PersonalizadoBox />
 
           <Spacer size="4rem" />
-        </Container>
+        </Container> */}
 
         {/* Rodapé */}
         <Footer />

@@ -2,7 +2,7 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 
 /** Animação do gradiente */
-const vibrateGradient = keyframes`
+export const vibrateGradient = keyframes`
   0% {
     background-position: 0% 50%;
   }

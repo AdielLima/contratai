@@ -202,7 +202,7 @@ export const TopBarTitle = styled.span`
 
 /* Mensagem do Usuário (em azul) */
 export const UserMessage = styled.div`
-  max-width: 80%;
+  max-width: 50%;
   margin-right: 1rem;
   text-align: left;
   white-space: pre-wrap;

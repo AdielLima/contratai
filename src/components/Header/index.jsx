@@ -16,8 +16,7 @@ function Header() {
     <HeaderContainer>
       <LogoImg src={Logo} alt="Logo ContratAI" />
       <NavBar>
-        <NavLink href="/">Início</NavLink>
-        <NavLink href="https://contratai.org/sair/">Sair</NavLink>
+        <NavLink href="/Assistentes">Conecte-se</NavLink>
       </NavBar>
     </HeaderContainer>
   );
