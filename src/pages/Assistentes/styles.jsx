@@ -1,4 +1,26 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+/* Animação para os pontinhos de carregamento */
+const bounce = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+`;
+
+/* Container e estilização dos pontinhos de loading */
+export const DotsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+`;
+
+export const Dot = styled.span`
+  width: 8px;
+  height: 8px;
+  background-color: ${(props) => props.color || "#55BFFF"};
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: ${bounce} 1s ${(props) => props.delay}s infinite ease-in-out;
+`;
 
 /* Layout Principal */
 export const Container = styled.div`
@@ -12,29 +34,29 @@ export const Container = styled.div`
   }
 `;
 
+/* Barra Lateral */
 export const Sidebar = styled.div`
   width: 19%;
   background-color: #f7f7f8;
-  padding: 1rem;
+  padding: 0.5rem;
   height: 100vh;
   overflow-y: auto;
 
-  /* Exemplo de classes internas que você acessa no JSX */
   .sidebar-logo-nome {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 
   .menu-item {
-    margin-top: 0.1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-radius: 0.5rem;
     font-weight: 400;
     font-size: 1rem;
-    padding: 8px 10px;
+    padding: 0.3rem;
     cursor: pointer;
     transition: background 0.2s;
 
@@ -67,7 +89,8 @@ export const Sidebar = styled.div`
   }
 
   .historico-container {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.3rem;
   }
 
   .historico-header {
@@ -75,6 +98,10 @@ export const Sidebar = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.5rem;
+  }
+
+  .fonteHistorico {
+    font-size: 0.7rem;
   }
 
   .search-icon {
@@ -91,13 +118,36 @@ export const Sidebar = styled.div`
     border-bottom: 1px solid #ddd;
     padding: 0.5rem 0;
     list-style: none;
-    margin: 0;
   }
 
   .historico-item {
     padding: 0.5rem 0;
     font-size: 0.9rem;
     color: #333;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+  }
+
+  .botao-minha-conta {
+    text-align: center;
+    background-color: #ffe950;
+    color: #333;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem;
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+      color: inherit; /* para herdar a cor definida em .botao-minha-conta */
+    }
+
+    &:hover {
+      background-color: #f0c000;
+    }
+
   }
 
   @media (max-width: 768px) {
@@ -107,50 +157,93 @@ export const Sidebar = styled.div`
   }
 `;
 
+/* Conteúdo Principal */
 export const MainContent = styled.div`
   flex: 1;
   background-color: #fff;
-  justify-content: center;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  text-align: center;
-  position: relative; /* para posicionar o txt-sm */
-  overflow: hidden;   /* caso precise cortar algo extra */
+  position: relative;
+  overflow: hidden;
+  margin: 0.5rem;
 
-  .top-bar {
-    margin: 2rem;
-    .top-bar-title {
-      font-size: 1.875rem;
-      font-weight: 600;
-    }
+  .area-chat {
+    flex: 1;
+    overflow-y: auto;
+    margin: 1rem;
   }
 
-  .container-text-area {
+  .chat-pergunta-div-1 {
     display: flex;
-    justify-content: center;
-  }
-
-  .txt-sm {
-    font-size: 0.7rem;
-    position: absolute;
-    bottom: 0;
-    text-align: center;
-    width: 100%;
-    padding-bottom: 5px; /* para dar um espaço do final da tela */
+    justify-content: flex-end;
   }
 
   @media (max-width: 768px) {
     padding: 1rem;
-    .top-bar {
-      margin: 1rem 0;
-      .top-bar-title {
-        font-size: 1rem;
-      }
-    }
-    .txt-sm {
-      font-size: 0.65rem;
-    }
+  }
+`;
+
+/* Top Bar */
+export const TopBar = styled.div`
+  text-align: center;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+`;
+
+export const TopBarTitle = styled.span`
+  font-size: 1.875rem;
+  font-weight: 300;
+  font-family: Roboto, sans-serif;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
+/* Mensagem do Usuário (em azul) */
+export const UserMessage = styled.div`
+  max-width: 80%;
+  margin-right: 1rem;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #cce5ff;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  font-size: 1.1rem;
+  line-height: 1.4;
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+`;
+
+/* Wrapper para envolver as mensagens do Assistente (margin) */
+export const MessageWrapper = styled.div`
+  /* margin: 16px 0; */
+`;
+
+/* Mensagem do Assistente */
+export const AssistantMessage = styled.div`
+  max-width: 80%;
+  margin: 0.5rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+`;
+
+/* Container para a área do TextArea */
+export const ContainerTextArea = styled.div`
+  padding: 0 20px;
+  margin-top: 10px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    margin-top: 8px;
   }
 `;
 
@@ -165,22 +258,23 @@ export const SearchBox = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 80%;
-  margin: 0 9rem; /* Ajuste se necessário */
+  margin: 0 auto;
 
   @media (max-width: 768px) {
     max-width: 100%;
     padding: 0.8rem;
-    margin: 0;
   }
 `;
 
 export const SearchTextArea = styled.textarea`
-  border: none;
-  outline: none;
-  resize: none;
-  background-color: transparent;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
   font-size: 1.1rem;
   color: #333;
+  resize: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
   overflow-y: hidden;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -262,6 +356,8 @@ export const ModalContent = styled.div`
     h2 {
       margin: 0;
       font-size: 1.2rem;
+      font-weight: 300;
+      font-family: Roboto, sans-serif;
     }
 
     .close-button {
@@ -278,6 +374,7 @@ export const ModalContent = styled.div`
 
   .modal-body {
     padding: 1rem;
+
     .modal-input {
       width: 100%;
       padding: 0.6rem 1rem;
@@ -305,4 +402,17 @@ export const ModalContent = styled.div`
       }
     }
   }
+`;
+
+/* Dicas abaixo do TextArea */
+export const TipContainer = styled.div`
+  margin-top: 8px;
+  text-align: center;
+`;
+
+export const TipText = styled.p`
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 0.85rem;
+  margin: 0;
 `;
