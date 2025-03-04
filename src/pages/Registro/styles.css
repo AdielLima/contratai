@@ -1,0 +1,7 @@
+/* Exemplo simples de destaque com sombra e borda.
+   Ajuste conforme seu design. */
+   .selected-card {
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
+    border: 2px solid #00d1b2; /* Cor Bulma "link" (verde-água) */
+  }
+  

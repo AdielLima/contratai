@@ -89,8 +89,6 @@ export default function Assistentes() {
     "Itens de um Termo de Referência...",
     "Qual a vigência de uma Ata de...",
     "Levantamento de Mercado para...",
-    "Dispensa do Estudo Técnico..",
-    "Obras e Serviços de Engenharia...",
   ];
 
   /**

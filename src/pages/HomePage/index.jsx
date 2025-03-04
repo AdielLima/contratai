@@ -56,18 +56,19 @@ function HomePage() {
       <Footer />
 
       {/* Modal Bulma */}
-      <div className={`modal ${isModalOpen ? "is-active" : ""}`}>
-  <div className="modal-background" onClick={closeModal}></div>
-  <div className="modal-card">
-    <header className="modal-card-head">
-      <p className="modal-card-title">Registro</p>
-      <button className="delete" aria-label="close" onClick={closeModal}></button>
-    </header>
-    <section className="modal-card-body">
-      <Registro onCloseModal={closeModal} />
-    </section>
-  </div>
-</div>
+      {/* <div className={`modal ${isModalOpen ? "is-active" : ""}`}>
+        <div className="modal-background" onClick={closeModal}></div>
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <p className="modal-card-title">Registro</p>
+            <button className="delete" aria-label="close" onClick={closeModal}></button>
+          </header>
+          <section className="modal-card-body">
+            <Registro onCloseModal={closeModal} />
+          </section>
+        </div>
+      </div> */}
+      <Registro isOpen={isModalOpen} onClose={closeModal} />
     </>
   );
 }

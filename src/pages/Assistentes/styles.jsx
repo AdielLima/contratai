@@ -136,7 +136,7 @@ export const Sidebar = styled.div`
     padding: 0.5rem 1rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    margin-top: 1rem;
+    margin: 3rem 0.5rem;
     font-weight: bold;
 
     a {
@@ -202,7 +202,7 @@ export const TopBarTitle = styled.span`
 
 /* Mensagem do Usuário (em azul) */
 export const UserMessage = styled.div`
-  max-width: 50%;
+  max-width: 30%;
   margin-right: 1rem;
   text-align: left;
   white-space: pre-wrap;
