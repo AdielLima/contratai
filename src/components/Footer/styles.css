@@ -1,0 +1,14 @@
+/* styles.css */
+
+.footer {
+  padding: 1.5rem 0;
+}
+
+.footer .buttons .button {
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+}

@@ -181,10 +181,20 @@ export const PageWrapper = styled.div`
 `;
 
 export const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-`; 4
+  width: 100%;
+  text-align: center;
+
+  .tag {
+    white-space: normal; /* permite quebra de linha */
+    height: auto;        /* ajusta altura automaticamente */
+    max-width: 80%;      /* ajusta largura máxima */
+    display: inline-block; /* permite a expansão correta */
+    line-height: 1.5;      /* melhora o espaçamento vertical do texto */
+    padding: 1rem;         /* aumenta o espaçamento interno, se desejar */
+}
+
+`;
+
 
 
 export const CtaButton = styled.a`
@@ -197,6 +207,7 @@ export const CtaButton = styled.a`
   border-radius: 16px;
   text-decoration: none;
   font-weight: 500;
+  cursor: pointer;
   transition: background 0.3s ease;
 
   &:hover {
@@ -392,4 +403,42 @@ export const LogoImg = styled.img`
   width: ${({ width = '50px' }) => width};
   height: ${({ height = '50px' }) => height};
   animation: ${spinAnimation} 6s linear infinite;
+`;
+
+export const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* cor de fundo semitransparente */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* para ficar acima de todos os elementos */
+`;
+
+// Container do modal (card)
+export const ModalContent = styled.div`
+  position: relative;
+  background: #fff;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+`;
+
+// Botão de fechar
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  &:hover {
+    color: #666;
+  }
 `;
