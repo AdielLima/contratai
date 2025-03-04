@@ -1,33 +1,21 @@
-// App.jsx
+// HomePage.jsx
 import React, { useState } from "react";
 import {
-  PageWrapper,
   Container,
   Title,
   Spacer,
-  TitleBenefits,
-  CtaButton,
-  ModalOverlay,
-  ModalContent,
-  CloseButton,
 } from "../../styles";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import DotsContainer from "../../components/DotsContainer";
 import Registro from "../Registro";
-import "./styles.css"; 
-
+import "./styles.css";
 
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -36,43 +24,50 @@ function HomePage() {
       <Spacer size="2rem" />
 
       <Container>
-        <h1 class="title is-size-1">ContratAI</h1>
+        <h1 className="title is-size-1">ContratAI</h1>
         <Spacer />
         <Title className="titulo-gradiente-vibrante">
           <b>Inteligência Artificial para Licitações e Contratos</b>
         </Title>
         <Spacer />
-        <p class="subtitle">Simplifica o Processo</p>
-        <p class="subtitle">Banco de Dados específico</p>
-        <p class="subtitle">Otimiza a Tomada de Decisão</p>
-        <p class="subtitle">Velocidade e Segurança Jurídica</p>
+        <p className="subtitle">Simplifica o Processo</p>
+        <p className="subtitle">Banco de Dados específico</p>
+        <p className="subtitle">Otimiza a Tomada de Decisão</p>
+        <p className="subtitle">Velocidade e Segurança Jurídica</p>
         <Spacer />
         <DotsContainer />
-        <h1 class="title is-size-3">Diferencial do ContratAI?</h1>
+        <h1 className="title is-size-3">Diferencial do ContratAI?</h1>
         <p>
-          <span class="tag is-light is-medium"> Com um vasto <strong>banco de dados vetorizado contendo leis,
-            doutrinas, jurisprudências do TCU e modelos da AGU, </strong> os assistentes inteligentes entregam
-            soluções rápidas, fundamentadas e com total segurança jurídica, respondendo às suas perguntas em segundos.
+          <span className="tag is-light is-medium">
+            Com um vasto <strong>banco de dados vetorizado contendo leis,
+              doutrinas, jurisprudências do TCU e modelos da AGU,</strong> os assistentes
+            inteligentes entregam soluções rápidas, fundamentadas e com total
+            segurança jurídica, respondendo às suas perguntas em segundos.
           </span>
         </p>
 
         <Spacer />
-        <button class="button is-black is-large custom-button" onClick={openModal}>Registre-se</button>
+        <button className="button is-black is-large custom-button" onClick={openModal}>
+          Registre-se
+        </button>
         <Spacer />
-
       </Container>
 
       <Footer />
 
-      {isModalOpen && (
-        <ModalOverlay>
-          <ModalContent>
-            {/* Botão para fechar o modal */}
-            <CloseButton onClick={closeModal}>X</CloseButton>
-            <Registro />
-          </ModalContent>
-        </ModalOverlay>
-      )}
+      {/* Modal Bulma */}
+      <div className={`modal ${isModalOpen ? "is-active" : ""}`}>
+  <div className="modal-background" onClick={closeModal}></div>
+  <div className="modal-card">
+    <header className="modal-card-head">
+      <p className="modal-card-title">Registro</p>
+      <button className="delete" aria-label="close" onClick={closeModal}></button>
+    </header>
+    <section className="modal-card-body">
+      <Registro onCloseModal={closeModal} />
+    </section>
+  </div>
+</div>
     </>
   );
 }

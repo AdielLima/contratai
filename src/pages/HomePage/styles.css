@@ -8,4 +8,20 @@
     background-color: #333 !important;
     color: #fff;
   }
+
+  .modal-card {
+    border-radius: 8px !important;
+    overflow: hidden; /* Garante que o conteúdo não ultrapasse o arredondamento */
+  }
+  
+  .modal-card-head {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .modal-card-body {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  
   
