@@ -1,26 +1,42 @@
 import React, { useState } from "react";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Registro({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
 
-  // Aqui você pode armazenar todos os dados necessários
+  // Mapeamento do passo -> Título
+  const stepTitles = {
+    1: "Registro",
+    2: "Escolha de Plano",
+    3: "Pagamento",
+    4: "Entrar",
+  };
+
+  // Dados do formulário
   const [formData, setFormData] = useState({
     nome: "",
     cpf: "",
     email: "",
     whatsapp: "",
+    senhaRegistro: "",
     plano: "", // "plano_mensal" ou "plano_credito"
-    metodoPagamento: "", // "cartao" ou "pix" (definido automaticamente ao selecionar o plano)
-    // Campos para cartão
+    metodoPagamento: "", // "cartao" ou "pix"
     numeroCartao: "",
     nomeTitular: "",
     validade: "",
     cvv: "",
+    // Campos de Login:
+    emailLogin: "",
+    senha: "",
   });
 
-  // Possível estado de erro ou feedback
+  // Estado para erro de email no registro (passo 1)
   const [emailError, setEmailError] = useState("");
+
+  // Estado para exibir erro de login (passo 4)
+  const [loginError, setLoginError] = useState("");
 
   // Exemplo de estado para armazenar o QR Code do Asaas (se Pix)
   const [pixData, setPixData] = useState({
@@ -29,7 +45,7 @@ export default function Registro({ isOpen, onClose }) {
   });
 
   // -------------------------------
-  // Passo 1: Funções para formatar e validar
+  // Funções de formatação (passo 1)
   // -------------------------------
   const formatCPF = (value) => {
     return value
@@ -56,37 +72,25 @@ export default function Registro({ isOpen, onClose }) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  // Handlers genéricos
+  // Handlers de input
   const handleNameChange = (e) => {
     const formattedValue = formatName(e.target.value);
-    setFormData((prev) => ({
-      ...prev,
-      nome: formattedValue,
-    }));
+    setFormData((prev) => ({ ...prev, nome: formattedValue }));
   };
 
   const handleCPFChange = (e) => {
     const formatted = formatCPF(e.target.value);
-    setFormData((prev) => ({
-      ...prev,
-      cpf: formatted,
-    }));
+    setFormData((prev) => ({ ...prev, cpf: formatted }));
   };
 
   const handleWhatsappChange = (e) => {
     const formatted = formatPhone(e.target.value);
-    setFormData((prev) => ({
-      ...prev,
-      whatsapp: formatted,
-    }));
+    setFormData((prev) => ({ ...prev, whatsapp: formatted }));
   };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      email: value,
-    }));
+    setFormData((prev) => ({ ...prev, email: value }));
 
     if (!value || isValidEmail(value)) {
       setEmailError("");
@@ -95,8 +99,8 @@ export default function Registro({ isOpen, onClose }) {
     }
   };
 
+  // Handler genérico para cartão e login
   const handleChange = (e) => {
-    // Handler genérico para inputs do cartão
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -106,33 +110,59 @@ export default function Registro({ isOpen, onClose }) {
   // -------------------------------
   // Controles de Avançar/Voltar
   // -------------------------------
-  const nextStep = () => {
-    setStep((prev) => prev + 1);
-  };
-
+  const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => {
     if (step > 1) setStep((prev) => prev - 1);
   };
 
-  // Fechar o modal (chama a prop onClose)
   const handleClose = () => {
-    // Decide se quer resetar ou não o wizard.
     setStep(1);
     onClose();
   };
 
   // -------------------------------
-  // Submeter as informações em cada passo
+  // Função de autenticação (Login)
+  // -------------------------------
+  const handleLogin = async () => {
+    try {
+      // Exemplo fictício de requisição de login:
+      /*
+      const response = await fetch("SEU_ENDPOINT_DE_LOGIN", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.emailLogin,
+          senha: formData.senha,
+        }),
+      });
+
+      if (!response.ok) {
+        // Se deu erro na autenticação
+        throw new Error("Credenciais inválidas");
+      }
+      // Se chegou aqui, login deu certo
+      */
+
+      // Sucesso: fecha o modal e redireciona
+      handleClose();
+      navigate("/assistentes");
+    } catch (error) {
+      setLoginError("Falha na autenticação. Verifique suas credenciais.");
+      console.error(error);
+    }
+  };
+
+  // -------------------------------
+  // Fluxo do wizard (submit em cada passo)
   // -------------------------------
   async function submitStep() {
-    // Incluir try/catch conforme a necessidade.
     if (step === 1) {
-      // Passo 1: Criar usuário no Supabase e Asaas
+      // Registra usuário
       try {
         /*
-        await fetch('SEU_ENDPOINT_N8N_REGISTRO', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        await fetch("SEU_ENDPOINT_N8N_REGISTRO", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             nome: formData.nome,
             cpf: formData.cpf,
@@ -148,14 +178,12 @@ export default function Registro({ isOpen, onClose }) {
     }
 
     if (step === 2) {
-      // Passo 2: Plano foi escolhido.
-      // Vamos definir o metodoPagamento AUTOMATICAMENTE
-      // e pular direto para o passo de pagamento.
+      // Envia escolha de plano
       try {
         /*
-        await fetch('SEU_ENDPOINT_N8N_ESCOLHA_PLANO', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        await fetch("SEU_ENDPOINT_N8N_ESCOLHA_PLANO", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             plano: formData.plano,
             email: formData.email,
@@ -167,35 +195,27 @@ export default function Registro({ isOpen, onClose }) {
         return;
       }
 
-      // Determina método com base no plano:
+      // Define pagamento automaticamente
       if (formData.plano === "plano_mensal") {
         setFormData((prev) => ({ ...prev, metodoPagamento: "cartao" }));
       } else if (formData.plano === "plano_credito") {
         setFormData((prev) => ({ ...prev, metodoPagamento: "pix" }));
       }
-
-      // Importante: Precisamos avançar para o próximo passo ASSIM QUE o estado
-      // for atualizado. Podemos usar um setTimeout(0) ou simplesmente
-      // avançar com nextStep() no final, pois a atualização do state
-      // não impede a mudança de passo.
     }
 
     if (step === 3) {
-      // Passo 3: Se for cartão, envia dados do cartão;
-      //          Se for pix, gera QR code.
+      // Se for cartão, envia dados; se Pix, gera QRCode
       if (formData.metodoPagamento === "cartao") {
-        // Enviar dados do cartão
         try {
           /*
-          await fetch('SEU_ENDPOINT_N8N_PAGAMENTO_CARTAO', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          await fetch("SEU_ENDPOINT_N8N_PAGAMENTO_CARTAO", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               nomeTitular: formData.nomeTitular,
               numeroCartao: formData.numeroCartao,
               validade: formData.validade,
               cvv: formData.cvv,
-              // Plano, email etc.
               plano: formData.plano,
               email: formData.email,
             }),
@@ -206,12 +226,12 @@ export default function Registro({ isOpen, onClose }) {
           return;
         }
       } else {
-        // Pix: exemplo de chamada que retorna QR code e copia e cola
+        // Pix
         try {
           /*
-          const res = await fetch('SEU_ENDPOINT_N8N_PAGAMENTO_PIX', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const res = await fetch("SEU_ENDPOINT_N8N_PAGAMENTO_PIX", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               plano: formData.plano,
               email: formData.email,
@@ -230,12 +250,12 @@ export default function Registro({ isOpen, onClose }) {
       }
     }
 
-    // Avança para o próximo passo ao final
+    // Avança
     nextStep();
   }
 
   // -------------------------------
-  // Renderização Condicional de cada Passo
+  // Renderização de cada Passo
   // -------------------------------
   const renderStep = () => {
     switch (step) {
@@ -245,60 +265,81 @@ export default function Registro({ isOpen, onClose }) {
       case 1:
         return (
           <>
-            <h1 className="title is-4">Registro</h1>
-            <div className="field">
-              <label className="label">Nome Completo</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="nome"
-                  value={formData.nome}
-                  onChange={handleNameChange}
-                  placeholder="Digite seu nome"
-                />
-              </div>
-            </div>
+            <div className="columns">
+              {/* Coluna da esquerda */}
+              <div className="column">
+                <div className="field">
+                  <label className="label">Nome Completo</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      name="nome"
+                      value={formData.nome}
+                      onChange={handleNameChange}
+                      placeholder="Digite seu nome"
+                    />
+                  </div>
+                </div>
 
-            <div className="field">
-              <label className="label">Email</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleEmailChange}
-                  placeholder="Digite seu email"
-                  type="email"
-                />
-                {emailError && <p className="help is-danger">{emailError}</p>}
-              </div>
-            </div>
+                <div className="field">
+                  <label className="label">Email</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleEmailChange}
+                      placeholder="Digite seu email"
+                      type="email"
+                    />
+                    {emailError && <p className="help is-danger">{emailError}</p>}
+                  </div>
+                </div>
 
-            <div className="field">
-              <label className="label">CPF</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="cpf"
-                  value={formData.cpf}
-                  onChange={handleCPFChange}
-                  placeholder="Digite seu CPF"
-                  maxLength={14}
-                />
+                <div className="field">
+                  <label className="label">Senha</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      name="senhaRegistro"
+                      value={formData.senhaRegistro}
+                      onChange={handleChange}
+                      placeholder="Digite sua senha"
+                      type="password"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div className="field">
-              <label className="label">WhatsApp</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="whatsapp"
-                  value={formData.whatsapp}
-                  onChange={handleWhatsappChange}
-                  placeholder="Digite seu WhatsApp"
-                  maxLength={15}
-                />
+              {/* Coluna da direita */}
+              <div className="column">
+                <div className="field">
+                  <label className="label">CPF</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      name="cpf"
+                      value={formData.cpf}
+                      onChange={handleCPFChange}
+                      placeholder="Digite seu CPF"
+                      maxLength={14}
+                    />
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label className="label">WhatsApp</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      name="whatsapp"
+                      value={formData.whatsapp}
+                      onChange={handleWhatsappChange}
+                      placeholder="Digite seu WhatsApp"
+                      maxLength={15}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -311,6 +352,7 @@ export default function Registro({ isOpen, onClose }) {
                   !formData.email ||
                   !formData.cpf ||
                   !formData.whatsapp ||
+                  !formData.senhaRegistro ||
                   emailError
                 }
               >
@@ -326,7 +368,6 @@ export default function Registro({ isOpen, onClose }) {
       case 2:
         return (
           <>
-            <h1 className="title is-4">Escolha seu Plano</h1>
             <div className="columns is-multiline is-centered">
               {/* Plano Mensal */}
               <div className="column is-one-third">
@@ -408,8 +449,6 @@ export default function Registro({ isOpen, onClose }) {
 
       // --------------------------------
       // Passo 3: Pagamento
-      //   - Cartão se "plano_mensal"
-      //   - Pix se "plano_credito"
       // --------------------------------
       case 3:
         if (formData.metodoPagamento === "cartao") {
@@ -484,10 +523,9 @@ export default function Registro({ isOpen, onClose }) {
             </>
           );
         } else {
-          // PIX: Mostrar QR Code e/ou código Copia e Cola
+          // PIX
           return (
             <>
-              <h1 className="title is-4">Pagamento via Pix</h1>
               <p>Seu QR Code ou código de pagamento foi gerado. Escaneie ou copie:</p>
               {pixData.qrCode ? (
                 <div className="has-text-centered">
@@ -522,18 +560,19 @@ export default function Registro({ isOpen, onClose }) {
         }
 
       // --------------------------------
-      // Passo 4: Login final
+      // Passo 4: Login
       // --------------------------------
       case 4:
         return (
           <>
-            <h1 className="title is-4">Login</h1>
             <div className="field">
               <label className="label">Email</label>
               <div className="control">
                 <input
                   className="input"
                   name="emailLogin"
+                  value={formData.emailLogin}
+                  onChange={handleChange}
                   placeholder="Digite seu email de login"
                 />
               </div>
@@ -545,18 +584,21 @@ export default function Registro({ isOpen, onClose }) {
                   className="input"
                   name="senha"
                   type="password"
+                  value={formData.senha}
+                  onChange={handleChange}
                   placeholder="Digite sua senha"
                 />
               </div>
             </div>
+
+            {loginError && (
+              <p className="help is-danger" style={{ marginTop: "0.5rem" }}>
+                {loginError}
+              </p>
+            )}
+
             <div className="buttons is-right">
-              <button
-                className="button is-link"
-                onClick={() => {
-                  // Exemplo de lógica de login ou redirecionamento
-                  handleClose();
-                }}
-              >
+              <button className="button is-link" onClick={handleLogin}>
                 Entrar
               </button>
             </div>
@@ -576,13 +618,12 @@ export default function Registro({ isOpen, onClose }) {
       <div className="modal-background" onClick={handleClose}></div>
       <div className="modal-card" style={{ width: "90%", maxWidth: "700px" }}>
         <header className="modal-card-head">
-          <p className="modal-card-title">Fluxo de Cadastro</p>
-          <button
-            className="delete"
-            aria-label="close"
-            onClick={handleClose}
-          ></button>
+          {/* TÍTULO DINÂMICO */}
+          <p className="modal-card-title">{stepTitles[step]}</p>
+
+          <button className="delete" aria-label="close" onClick={handleClose} />
         </header>
+
         <section className="modal-card-body">{renderStep()}</section>
       </div>
     </div>
