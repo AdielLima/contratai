@@ -10,23 +10,6 @@ export const Container = styled.div`
   border-radius: 8px;
 `;
 
-export const Title = styled.h2`
-  text-align: center;
-  margin-bottom: 24px;
-`;
-
-export const Label = styled.label`
-  margin-bottom: 8px;
-  font-weight: 600;
-`;
-
-export const Input = styled.input`
-  padding: 8px;
-  margin-bottom: 16px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
 
 export const ButtonContainer = styled.div`
   display: flex;

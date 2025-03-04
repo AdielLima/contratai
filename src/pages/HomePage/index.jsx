@@ -15,6 +15,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import DotsContainer from "../../components/DotsContainer";
 import Registro from "../Registro";
+import "./styles.css"; 
 
 
 function HomePage() {
@@ -56,7 +57,7 @@ function HomePage() {
         </p>
 
         <Spacer />
-        <button class="button is-black is-large" onClick={openModal}>Registre-se</button>
+        <button class="button is-black is-large custom-button" onClick={openModal}>Registre-se</button>
         <Spacer />
 
       </Container>

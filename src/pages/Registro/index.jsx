@@ -5,9 +5,6 @@ import {
   Button,
   ButtonContainer,
   Container,
-  Input,
-  Label,
-  Title
 } from "./styles";
 
 export default function Registro({ onCloseModal }) {
@@ -108,48 +105,59 @@ export default function Registro({ onCloseModal }) {
       {/* ETAPA 1: Registro */}
       {step === 1 && (
         <>
-          <Title>Registro - Etapa 1</Title>
+          <div class="field">
+            <label class="label">Nome Completo</label>
+            <div class="control">
+              <input class="input"
+                id="nome"
+                name="nome"
+                value={formData.nome}
+                onChange={handleNameChange}
+                placeholder="Digite seu nome" />
+            </div>
+          </div>
 
-          <Label htmlFor="nome">Nome</Label>
-          <Input
-            id="nome"
-            name="nome"
-            value={formData.nome}
-            onChange={handleNameChange}
-            placeholder="Digite seu nome"
-          />
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              <input class="input"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleEmailChange}
+                placeholder="Digite seu email"
+                type="email" />
+            </div>
+          </div>
 
-          <Label htmlFor="cpf">CPF</Label>
-          <Input
-            id="cpf"
-            name="cpf"
-            value={formData.cpf}
-            onChange={handleCPFChange}
-            placeholder="Digite seu CPF"
-            maxLength={14} // tamanho máximo contando com máscara
-          />
+          <div class="field">
+            <label class="label">CPF</label>
+            <div class="control">
+              <input class="input"
+                id="cpf"
+                name="cpf"
+                value={formData.cpf}
+                onChange={handleCPFChange}
+                placeholder="Digite seu CPF"
+                maxLength={14}
+              />
+            </div>
+          </div>
 
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleEmailChange}
-            placeholder="Digite seu email"
-            type="email"
-          />
+          <div class="field">
+            <label class="label">WhatsApp</label>
+            <div class="control">
+              <input class="input"
+               id="whatsapp"
+               name="whatsapp"
+               value={formData.whatsapp}
+               onChange={handleWhatsappChange}
+               placeholder="Digite seu WhatsApp"
+               maxLength={15}
+              />
+            </div>
+          </div>
 
-          {emailError && <span className="text-red-500 text-sm">{emailError}</span>}
-
-          <Label htmlFor="whatsapp">WhatsApp</Label>
-          <Input
-            id="whatsapp"
-            name="whatsapp"
-            value={formData.whatsapp}
-            onChange={handleWhatsappChange}
-            placeholder="Digite seu WhatsApp"
-            maxLength={15}
-          />
           <ButtonContainer>
             {/* Etapa 1 não tem botão de voltar */}
             <Button
@@ -170,7 +178,6 @@ export default function Registro({ onCloseModal }) {
       {/* ETAPA 2: Pagamento */}
       {step === 2 && (
         <>
-          <Title>Registro - Etapa 2</Title>
           <p>Aqui você pode exibir a tela de pagamento.</p>
 
           <ButtonContainer>
