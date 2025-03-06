@@ -56,6 +56,7 @@ export const GlobalStyle = createGlobalStyle`
     position: relative;
     overflow: visible;
     margin: 0 auto;
+    max-width: 1200px;
   }
   .dot {
     opacity: 0;
