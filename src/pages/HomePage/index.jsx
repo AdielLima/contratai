@@ -24,7 +24,7 @@ function HomePage() {
       <Spacer size="2rem" />
 
       <Container>
-        <h1 className="title is-size-1">ContratAI</h1>
+        <h1 className="title is-size-1 has-text-weight-light">ContratAI</h1>
         <Spacer />
         <Title className="titulo-gradiente-vibrante">
           <b>Inteligência Artificial para Licitações e Contratos</b>
@@ -36,7 +36,7 @@ function HomePage() {
         <p className="subtitle">Velocidade e Segurança Jurídica</p>
         <Spacer />
         <DotsContainer />
-        <h1 className="title is-size-3">Diferencial do ContratAI?</h1>
+        <h1 className="title is-size-2 has-text-weight-light">Diferencial do ContratAI?</h1>
         <p>
           <span className="tag is-light is-medium">
             Com um vasto <strong>banco de dados vetorizado contendo leis,

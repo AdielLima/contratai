@@ -17,7 +17,7 @@ export const NavBar = styled.nav`
 `;
 
 export const NavLink = styled.a`
-  color: #fff;
+  color: black;
   text-decoration: none;
   border: none;
   border-radius: 15px;

@@ -50,12 +50,11 @@ export const GlobalStyle = createGlobalStyle`
 
   /* ---------- Estilos do container dos "pontinhos" ---------- */
   .dots-container {
-    width: 90%;
-    max-width: 1200px;
-    height: 200px;
+    width: 100%;
+    height: 15rem;
     background: transparent;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     margin: 0 auto;
   }
   .dot {
