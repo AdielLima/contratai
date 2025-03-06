@@ -36,6 +36,7 @@ function HomePage() {
         <p className="subtitle">Velocidade e Segurança Jurídica</p>
         <Spacer />
         <DotsContainer />
+        <Spacer />
         <h1 className="title is-size-2 has-text-weight-light">Diferencial do ContratAI?</h1>
         <p>
           <span className="tag is-light is-medium">
