@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
 
@@ -6,13 +6,17 @@ export default function Registro({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
 
-  // Mapeamento do passo -> Título
   const stepTitles = {
     1: "Registro",
     2: "Escolha de Plano",
     3: "Pagamento",
     4: "Entrar",
   };
+
+  // Guardamos o ID do usuário (retornado no passo 1)
+  const [userId, setUserId] = useState(null);
+  // Guardamos o ID do plano retornado no passo 2 (1 ou 2, de acordo com o banco)
+  const [planId, setPlanId] = useState(null);
 
   // Dados do formulário
   const [formData, setFormData] = useState({
@@ -23,73 +27,54 @@ export default function Registro({ isOpen, onClose }) {
     senhaRegistro: "",
     plano: "", // "plano_mensal" ou "plano_credito"
     metodoPagamento: "", // "cartao" ou "pix"
-    numeroCartao: "",
-    nomeTitular: "",
-    validade: "",
-    cvv: "",
-    // Campos de Login:
     emailLogin: "",
     senha: "",
   });
 
-  // Estado para erro de email no registro (passo 1)
   const [emailError, setEmailError] = useState("");
-
-  // Estado para exibir erro de login (passo 4)
   const [loginError, setLoginError] = useState("");
 
-  // Exemplo de estado para armazenar o QR Code do Asaas (se Pix)
-  const [pixData, setPixData] = useState({
-    qrCode: "",
-    copiaCola: "",
-  });
+  // Dados para Pix
+  const [pixData, setPixData] = useState({ qrCode: "", copiaCola: "" });
 
   // -------------------------------
   // Funções de formatação (passo 1)
   // -------------------------------
-  const formatCPF = (value) => {
-    return value
+  const formatCPF = (value) =>
+    value
       .replace(/\D/g, "")
       .replace(/(\d{3})(\d)/, "$1.$2")
       .replace(/(\d{3})(\d)/, "$1.$2")
       .replace(/(\d{3})(\d{1,2})/, "$1-$2")
       .replace(/(-\d{2})\d+?$/, "$1");
-  };
 
-  const formatPhone = (value) => {
-    return value
+  const formatPhone = (value) =>
+    value
       .replace(/\D/g, "")
       .replace(/^(\d{2})(\d)/g, "($1) $2")
       .replace(/(\d{5})(\d{1,4})$/, "$1-$2")
       .slice(0, 15);
-  };
 
-  const formatName = (value) => {
-    return value.replace(/[^a-zA-ZÀ-ú\s]/g, "");
-  };
+  const formatName = (value) => value.replace(/[^a-zA-ZÀ-ú\s]/g, "");
 
-  const isValidEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  const isValidEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // Handlers de input
+  // Handlers
   const handleNameChange = (e) => {
-    const formattedValue = formatName(e.target.value);
-    setFormData((prev) => ({ ...prev, nome: formattedValue }));
+    setFormData((prev) => ({ ...prev, nome: formatName(e.target.value) }));
   };
 
   const handleCPFChange = (e) => {
-    const formatted = formatCPF(e.target.value);
-    setFormData((prev) => ({ ...prev, cpf: formatted }));
+    setFormData((prev) => ({ ...prev, cpf: formatCPF(e.target.value) }));
   };
 
   const handleWhatsappChange = (e) => {
-    const formatted = formatPhone(e.target.value);
-    setFormData((prev) => ({ ...prev, whatsapp: formatted }));
+    setFormData((prev) => ({ ...prev, whatsapp: formatPhone(e.target.value) }));
   };
 
   const handleEmailChange = (e) => {
-    const value = e.target.value;
+    const { value } = e.target;
     setFormData((prev) => ({ ...prev, email: value }));
 
     if (!value || isValidEmail(value)) {
@@ -99,7 +84,6 @@ export default function Registro({ isOpen, onClose }) {
     }
   };
 
-  // Handler genérico para cartão e login
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -111,9 +95,7 @@ export default function Registro({ isOpen, onClose }) {
   // Controles de Avançar/Voltar
   // -------------------------------
   const nextStep = () => setStep((prev) => prev + 1);
-  const prevStep = () => {
-    if (step > 1) setStep((prev) => prev - 1);
-  };
+  const prevStep = () => step > 1 && setStep((prev) => prev - 1);
 
   const handleClose = () => {
     setStep(1);
@@ -121,29 +103,29 @@ export default function Registro({ isOpen, onClose }) {
   };
 
   // -------------------------------
-  // Função de autenticação (Login)
+  // Função de Login (Passo 4)
   // -------------------------------
   const handleLogin = async () => {
     try {
-      // Exemplo fictício de requisição de login:
-      /*
-      const response = await fetch("SEU_ENDPOINT_DE_LOGIN", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.emailLogin,
-          senha: formData.senha,
-        }),
-      });
+      // Chama webhook de login no n8n
+      const response = await fetch(
+        "https://seu-n8n.com/webhook/login-usuario", 
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.emailLogin,
+            senha: formData.senha,
+          }),
+        }
+      );
 
       if (!response.ok) {
-        // Se deu erro na autenticação
+        // Se o n8n retornar algum erro, lançamos exceção
         throw new Error("Credenciais inválidas");
       }
-      // Se chegou aqui, login deu certo
-      */
 
-      // Sucesso: fecha o modal e redireciona
+      // Se chegou aqui, login deu certo
       handleClose();
       navigate("/assistentes");
     } catch (error) {
@@ -153,109 +135,244 @@ export default function Registro({ isOpen, onClose }) {
   };
 
   // -------------------------------
-  // Fluxo do wizard (submit em cada passo)
+  // Integração com Mercado Pago
+  // -------------------------------
+  useEffect(() => {
+    // Só inicializa o cardForm se for passo 3 E método "cartao"
+    if (step === 3 && formData.metodoPagamento === "cartao") {
+      if (window.MercadoPago) {
+        const mp = new window.MercadoPago("TEST-96fd7ebe-46d2-43cd-a968-e03ecc005ee2", {
+          locale: "pt-BR",
+        });
+
+        // Define o valor com base no plano
+        let amountToPay = "130.00";
+        if (formData.plano === "plano_credito") {
+          amountToPay = "10.00";
+        }
+
+        mp.cardForm({
+          amount: amountToPay,
+          autoMount: true,
+          form: {
+            id: "form-checkout",
+            cardholderName: {
+              id: "form-checkout__cardholderName",
+              placeholder: "Nome como está no cartão",
+            },
+            cardholderEmail: {
+              id: "form-checkout__cardholderEmail",
+              placeholder: "E-mail",
+            },
+            cardNumber: {
+              id: "form-checkout__cardNumber",
+              placeholder: "Número do cartão",
+            },
+            cardExpirationMonth: {
+              id: "form-checkout__cardExpirationMonth",
+              placeholder: "MM",
+            },
+            cardExpirationYear: {
+              id: "form-checkout__cardExpirationYear",
+              placeholder: "YY",
+            },
+            securityCode: {
+              id: "form-checkout__securityCode",
+              placeholder: "CVV",
+            },
+            installments: {
+              id: "form-checkout__installments",
+              placeholder: "Parcelas",
+            },
+            identificationType: {
+              id: "form-checkout__identificationType",
+              placeholder: "Tipo de documento",
+            },
+            identificationNumber: {
+              id: "form-checkout__identificationNumber",
+              placeholder: "Número do documento",
+            },
+            issuer: {
+              id: "form-checkout__issuer",
+              placeholder: "Banco emissor",
+            },
+          },
+          callbacks: {
+            onFormMounted: (error) => {
+              if (error) console.warn("Erro ao montar formulário:", error);
+            },
+            onSubmit: (event) => {
+              event.preventDefault();
+
+              const {
+                paymentMethodId,
+                issuerId,
+                cardholderEmail,
+                amount,
+                token,
+                installments,
+                identificationNumber,
+                identificationType,
+              } = mp.cardForm.getCardFormData();
+
+              // Envia ao webhook do n8n que fará:
+              // 1) Pagamento no Mercado Pago
+              // 2) Registro na tabela `payments`
+              fetch("https://seu-n8n.com/webhook/pagamento-cartao", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  user_id: userId,
+                  plan_id: planId,
+                  paymentMethodId,
+                  issuerId,
+                  token,
+                  installments,
+                  identificationNumber,
+                  identificationType,
+                  email: cardholderEmail,
+                  amount,
+                }),
+              })
+                .then((res) => {
+                  if (!res.ok) throw new Error("Falha ao processar pagamento");
+                  return res.json();
+                })
+                .then((data) => {
+                  console.log("Pagamento aprovado:", data);
+                  // Avança para o passo 4
+                  nextStep();
+                })
+                .catch((err) => {
+                  console.error("Erro no pagamento:", err);
+                  alert("Ocorreu um erro no pagamento. Tente novamente.");
+                });
+            },
+            onFetching: (resource) => {
+              console.log("Processando pagamento...", resource);
+            },
+          },
+        });
+      } else {
+        console.error("Mercado Pago SDK não encontrada.");
+      }
+    }
+  }, [step, formData.metodoPagamento, formData.plano, userId, planId]);
+
+  // -------------------------------
+  // submitStep: controla fluxo do wizard
   // -------------------------------
   async function submitStep() {
     if (step === 1) {
-      // Registra usuário
+      // Cria usuário em "users"
       try {
-        /*
-        await fetch("SEU_ENDPOINT_N8N_REGISTRO", {
+        const response = await fetch("/webhook-test/7169ecb5-f7ea-43ac-aaaa-2867f2a25e6f", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            nome: formData.nome,
+            name: formData.nome,
             cpf: formData.cpf,
             email: formData.email,
             whatsapp: formData.whatsapp,
+            password: formData.senhaRegistro,
           }),
         });
-        */
-      } catch (error) {
-        console.error("Erro ao registrar usuário: ", error);
-        return;
-      }
-    }
 
-    if (step === 2) {
-      // Envia escolha de plano
-      try {
-        /*
-        await fetch("SEU_ENDPOINT_N8N_ESCOLHA_PLANO", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            plano: formData.plano,
-            email: formData.email,
-          }),
-        });
-        */
-      } catch (error) {
-        console.error("Erro ao escolher plano: ", error);
-        return;
-      }
-
-      // Define pagamento automaticamente
-      if (formData.plano === "plano_mensal") {
-        setFormData((prev) => ({ ...prev, metodoPagamento: "cartao" }));
-      } else if (formData.plano === "plano_credito") {
-        setFormData((prev) => ({ ...prev, metodoPagamento: "pix" }));
-      }
-    }
-
-    if (step === 3) {
-      // Se for cartão, envia dados; se Pix, gera QRCode
-      if (formData.metodoPagamento === "cartao") {
-        try {
-          /*
-          await fetch("SEU_ENDPOINT_N8N_PAGAMENTO_CARTAO", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              nomeTitular: formData.nomeTitular,
-              numeroCartao: formData.numeroCartao,
-              validade: formData.validade,
-              cvv: formData.cvv,
-              plano: formData.plano,
-              email: formData.email,
-            }),
-          });
-          */
-        } catch (error) {
-          console.error("Erro ao processar pagamento com cartão: ", error);
-          return;
+        if (!response.ok) {
+          throw new Error("Erro ao registrar usuário");
         }
+        const data = await response.json();
+        // Suponha que o webhook retorne { id: 'xxx' }
+        setUserId(data.id);
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+      nextStep();
+    }
+
+    else if (step === 2) {
+      // Usuário escolheu plano => atualiza user_plans com base nos IDs do banco
+      let selectedPlanId;
+      // No banco: 1 => plano_credito, 2 => plano_mensal
+      if (formData.plano === "plano_credito") {
+        selectedPlanId = 1;
       } else {
-        // Pix
-        try {
-          /*
-          const res = await fetch("SEU_ENDPOINT_N8N_PAGAMENTO_PIX", {
+        selectedPlanId = 2;
+      }
+
+      try {
+        const response = await fetch(
+          "/webhook-test/898a307f-0283-459f-b159-dc0f6ca5d756",
+          {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              plano: formData.plano,
-              email: formData.email,
+              user_id: userId,
+              plan_id: selectedPlanId,
             }),
-          });
-          const data = await res.json();
-          setPixData({
-            qrCode: data.qrCode,
-            copiaCola: data.copiaCola,
-          });
-          */
-        } catch (error) {
-          console.error("Erro ao gerar Pix: ", error);
-          return;
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Erro ao associar plano");
         }
+        const data = await response.json();
+        // Suponha que retorne { plan_id: 1 } ou { plan_id: 2 }
+        setPlanId(data.plan_id);
+
+        // Definimos o método de pagamento baseado no plan_id
+        // plan_id=1 (plano_credito) => Pix
+        // plan_id=2 (plano_mensal) => Cartão
+        if (data.plan_id === 1) {
+          setFormData((prev) => ({ ...prev, metodoPagamento: "pix" }));
+        } else {
+          setFormData((prev) => ({ ...prev, metodoPagamento: "cartao" }));
+        }
+        nextStep();
+      } catch (error) {
+        console.error(error);
+        return;
       }
     }
 
-    // Avança
-    nextStep();
+    else if (step === 3) {
+      // Se PIX, geramos QR Code e exibimos
+      if (formData.metodoPagamento === "pix") {
+        try {
+          const response = await fetch(
+            "https://seu-n8n.com/webhook/pagamento-pix",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user_id: userId,
+                plan_id: planId,
+                email: formData.email,
+              }),
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Falha ao gerar Pix");
+          }
+          const data = await response.json();
+          // Ex: data = { qrCode: "data:image/png;base64...", copiaCola: "chave123..." }
+          setPixData({ qrCode: data.qrCode, copiaCola: data.copiaCola });
+        } catch (error) {
+          console.error(error);
+          return;
+        }
+      }
+
+      // Se for pagamento com cartão, o nextStep ocorre no onSubmit do cardForm
+      if (formData.metodoPagamento !== "cartao") {
+        nextStep();
+      }
+    }
   }
 
   // -------------------------------
-  // Renderização de cada Passo
+  // Renderização de cada passo
   // -------------------------------
   const renderStep = () => {
     switch (step) {
@@ -266,7 +383,6 @@ export default function Registro({ isOpen, onClose }) {
         return (
           <>
             <div className="columns">
-              {/* Coluna da esquerda */}
               <div className="column">
                 <div className="field">
                   <label className="label">Nome Completo</label>
@@ -276,7 +392,7 @@ export default function Registro({ isOpen, onClose }) {
                       name="nome"
                       value={formData.nome}
                       onChange={handleNameChange}
-                      placeholder="Digite seu nome"
+                      placeholder="Seu nome"
                     />
                   </div>
                 </div>
@@ -287,12 +403,14 @@ export default function Registro({ isOpen, onClose }) {
                     <input
                       className="input"
                       name="email"
+                      type="email"
                       value={formData.email}
                       onChange={handleEmailChange}
-                      placeholder="Digite seu email"
-                      type="email"
+                      placeholder="Seu email"
                     />
-                    {emailError && <p className="help is-danger">{emailError}</p>}
+                    {emailError && (
+                      <p className="help is-danger">{emailError}</p>
+                    )}
                   </div>
                 </div>
 
@@ -302,16 +420,15 @@ export default function Registro({ isOpen, onClose }) {
                     <input
                       className="input"
                       name="senhaRegistro"
+                      type="password"
                       value={formData.senhaRegistro}
                       onChange={handleChange}
-                      placeholder="Digite sua senha"
-                      type="password"
+                      placeholder="Digite uma senha"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Coluna da direita */}
               <div className="column">
                 <div className="field">
                   <label className="label">CPF</label>
@@ -321,7 +438,7 @@ export default function Registro({ isOpen, onClose }) {
                       name="cpf"
                       value={formData.cpf}
                       onChange={handleCPFChange}
-                      placeholder="Digite seu CPF"
+                      placeholder="Apenas números"
                       maxLength={14}
                     />
                   </div>
@@ -335,7 +452,7 @@ export default function Registro({ isOpen, onClose }) {
                       name="whatsapp"
                       value={formData.whatsapp}
                       onChange={handleWhatsappChange}
-                      placeholder="Digite seu WhatsApp"
+                      placeholder="(XX) 9XXXX-XXXX"
                       maxLength={15}
                     />
                   </div>
@@ -363,13 +480,13 @@ export default function Registro({ isOpen, onClose }) {
         );
 
       // --------------------------------
-      // Passo 2: Escolher Plano
+      // Passo 2: Escolha de Plano
       // --------------------------------
       case 2:
         return (
           <>
             <div className="columns is-multiline is-centered">
-              {/* Plano Mensal */}
+              {/* Exemplo Plano Mensal (ID=2) */}
               <div className="column is-one-third">
                 <div
                   className={`card ${
@@ -380,9 +497,7 @@ export default function Registro({ isOpen, onClose }) {
                     <p className="card-header-title">Plano Mensal</p>
                   </header>
                   <div className="card-content">
-                    <p>
-                      <strong>R$ 130,00/mês</strong>
-                    </p>
+                    <p><strong>R$130,00/mês</strong></p>
                     <ul>
                       <li>Perguntas ilimitadas</li>
                     </ul>
@@ -400,7 +515,7 @@ export default function Registro({ isOpen, onClose }) {
                 </div>
               </div>
 
-              {/* Plano Por Crédito */}
+              {/* Exemplo Plano por Crédito (ID=1) */}
               <div className="column is-one-third">
                 <div
                   className={`card ${
@@ -408,12 +523,10 @@ export default function Registro({ isOpen, onClose }) {
                   }`}
                 >
                   <header className="card-header">
-                    <p className="card-header-title">Plano Por Crédito</p>
+                    <p className="card-header-title">Plano por Crédito</p>
                   </header>
                   <div className="card-content">
-                    <p>
-                      <strong>R$ 10,00</strong>
-                    </p>
+                    <p><strong>R$10,00</strong></p>
                     <ul>
                       <li>10 perguntas por dia</li>
                     </ul>
@@ -452,81 +565,121 @@ export default function Registro({ isOpen, onClose }) {
       // --------------------------------
       case 3:
         if (formData.metodoPagamento === "cartao") {
-          // FORMULÁRIO DE CARTÃO
+          // Checkout Transparente com Mercado Pago
           return (
             <>
               <h1 className="title is-4">Pagamento com Cartão</h1>
-              <div className="field">
-                <label className="label">Número do Cartão</label>
-                <div className="control">
-                  <input
-                    className="input"
-                    name="numeroCartao"
-                    value={formData.numeroCartao}
-                    onChange={handleChange}
-                    placeholder="**** **** **** ****"
-                  />
-                </div>
-              </div>
-
-              <div className="field">
-                <label className="label">Nome do Titular</label>
-                <div className="control">
-                  <input
-                    className="input"
-                    name="nomeTitular"
-                    value={formData.nomeTitular}
-                    onChange={handleChange}
-                    placeholder="Nome como está no cartão"
-                  />
-                </div>
-              </div>
-
-              <div className="field is-horizontal">
-                <div className="field-body">
-                  <div className="field">
-                    <label className="label">Validade</label>
-                    <div className="control">
-                      <input
-                        className="input"
-                        name="validade"
-                        value={formData.validade}
-                        onChange={handleChange}
-                        placeholder="MM/AA"
-                      />
-                    </div>
+              <form id="form-checkout">
+                <div className="field">
+                  <label className="label">Número do Cartão</label>
+                  <div className="control">
+                    <div id="form-checkout__cardNumber" className="mp-input" />
                   </div>
-                  <div className="field">
-                    <label className="label">CVV</label>
-                    <div className="control">
-                      <input
-                        className="input"
-                        name="cvv"
-                        value={formData.cvv}
-                        onChange={handleChange}
-                        placeholder="123"
-                        maxLength={4}
-                      />
+                </div>
+
+                <div className="field is-horizontal">
+                  <div className="field-body">
+                    <div className="field">
+                      <label className="label">Validade (MM/AA)</label>
+                      <div className="control">
+                        <div
+                          id="form-checkout__cardExpirationMonth"
+                          className="mp-input"
+                        />
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label className="label">&nbsp;</label>
+                      <div className="control">
+                        <div
+                          id="form-checkout__cardExpirationYear"
+                          className="mp-input"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="buttons is-right">
-                <button className="button" onClick={prevStep}>
-                  Voltar
-                </button>
-                <button className="button is-link" onClick={submitStep}>
-                  Finalizar Pagamento
-                </button>
-              </div>
+                <div className="field">
+                  <label className="label">Código de Segurança (CVV)</label>
+                  <div className="control">
+                    <div id="form-checkout__securityCode" className="mp-input" />
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label className="label">Nome do Titular</label>
+                  <div className="control">
+                    <div
+                      id="form-checkout__cardholderName"
+                      className="mp-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label className="label">E-mail</label>
+                  <div className="control">
+                    <div
+                      id="form-checkout__cardholderEmail"
+                      className="mp-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="field is-horizontal">
+                  <div className="field-body">
+                    <div className="field">
+                      <label className="label">Tipo Doc</label>
+                      <div className="control">
+                        <div
+                          id="form-checkout__identificationType"
+                          className="mp-input"
+                        />
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label className="label">Número Doc</label>
+                      <div className="control">
+                        <div
+                          id="form-checkout__identificationNumber"
+                          className="mp-input"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label className="label">Banco Emissor</label>
+                  <div className="control">
+                    <div id="form-checkout__issuer" className="mp-input" />
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label className="label">Parcelas</label>
+                  <div className="control">
+                    <div id="form-checkout__installments" className="mp-input" />
+                  </div>
+                </div>
+
+                <div className="buttons is-right">
+                  <button className="button" onClick={prevStep}>
+                    Voltar
+                  </button>
+                  <button type="submit" className="button is-link">
+                    Finalizar Pagamento
+                  </button>
+                </div>
+              </form>
             </>
           );
         } else {
-          // PIX
+          // Fluxo PIX
           return (
             <>
-              <p>Seu QR Code ou código de pagamento foi gerado. Escaneie ou copie:</p>
+              <p>Escaneie o QR Code ou copie o código PIX:</p>
               {pixData.qrCode ? (
                 <div className="has-text-centered">
                   <img
@@ -540,11 +693,11 @@ export default function Registro({ isOpen, onClose }) {
               )}
               {pixData.copiaCola ? (
                 <div className="notification is-light">
-                  <strong>Código Copia e Cola:</strong> <br />
+                  <strong>Cópia e Cola:</strong> <br />
                   {pixData.copiaCola}
                 </div>
               ) : (
-                <p>Gerando código Pix...</p>
+                <p>Carregando chave Pix...</p>
               )}
 
               <div className="buttons is-right">
@@ -571,9 +724,9 @@ export default function Registro({ isOpen, onClose }) {
                 <input
                   className="input"
                   name="emailLogin"
+                  placeholder="Seu email de login"
                   value={formData.emailLogin}
                   onChange={handleChange}
-                  placeholder="Digite seu email de login"
                 />
               </div>
             </div>
@@ -584,9 +737,9 @@ export default function Registro({ isOpen, onClose }) {
                   className="input"
                   name="senha"
                   type="password"
+                  placeholder="Sua senha"
                   value={formData.senha}
                   onChange={handleChange}
-                  placeholder="Digite sua senha"
                 />
               </div>
             </div>
@@ -611,19 +764,16 @@ export default function Registro({ isOpen, onClose }) {
   };
 
   // -------------------------------
-  // Renderização do Modal
+  // Render do Modal
   // -------------------------------
   return (
     <div className={`modal ${isOpen ? "is-active" : ""}`}>
       <div className="modal-background" onClick={handleClose}></div>
       <div className="modal-card" style={{ width: "90%", maxWidth: "700px" }}>
         <header className="modal-card-head">
-          {/* TÍTULO DINÂMICO */}
           <p className="modal-card-title">{stepTitles[step]}</p>
-
           <button className="delete" aria-label="close" onClick={handleClose} />
         </header>
-
         <section className="modal-card-body">{renderStep()}</section>
       </div>
     </div>
