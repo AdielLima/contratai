@@ -186,8 +186,8 @@ export const MainContent = styled.div`
 /* Top Bar */
 export const TopBar = styled.div`
   text-align: center;
-  margin-top: 4rem;
-  margin-bottom: 4rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 `;
 
 export const TopBarTitle = styled.span`
