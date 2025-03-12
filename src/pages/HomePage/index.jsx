@@ -10,6 +10,7 @@ import Footer from "../../components/Footer";
 import DotsContainer from "../../components/DotsContainer";
 import Registro from "../Registro";
 import "./styles.css";
+import IntegracaoMercadoPago from "../MercadoPago";
 
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,6 +71,7 @@ function HomePage() {
         </div>
       </div> */}
       <Registro isOpen={isModalOpen} onClose={closeModal} />
+      {/* <IntegracaoMercadoPago isOpen={isModalOpen} onClose={closeModal} /> */}
     </>
   );
 }
