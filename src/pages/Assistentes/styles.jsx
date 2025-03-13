@@ -1,12 +1,17 @@
 import styled, { keyframes } from "styled-components";
+import { FaSearch, FaArrowUp, FaTimes } from "react-icons/fa";
 
-/* Animação para os pontinhos de carregamento */
+/* ====================================================
+   Animações
+==================================================== */
 const bounce = keyframes`
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 `;
 
-/* Container e estilização dos pontinhos de loading */
+/* ====================================================
+   Loading Indicators
+==================================================== */
 export const DotsContainer = styled.div`
   display: flex;
   align-items: center;
@@ -22,11 +27,13 @@ export const Dot = styled.span`
   animation: ${bounce} 1s ${(props) => props.delay}s infinite ease-in-out;
 `;
 
-/* Layout Principal */
+/* ====================================================
+   Layout Containers
+==================================================== */
 export const Container = styled.div`
   display: flex;
   height: 100vh;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
   color: #333;
 
   @media (max-width: 768px) {
@@ -34,7 +41,6 @@ export const Container = styled.div`
   }
 `;
 
-/* Barra Lateral */
 export const Sidebar = styled.div`
   width: 19%;
   background-color: #f7f7f8;
@@ -42,20 +48,41 @@ export const Sidebar = styled.div`
   height: 100vh;
   overflow-y: auto;
 
+    /* Estilização para navegadores WebKit (Chrome, Safari) */
+    &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #e0e0e0; /* cor do fundo da barra de rolagem */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc; /* cor do "polegar" da barra de rolagem */
+  }
+
+  /* Estilização para Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #e0e0e0;
+
+
+  /* Logo e Nome */
   .sidebar-logo-nome {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+    margin-top: 0.5rem;
   }
 
+  /* Menu de Assistentes */
   .menu-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-radius: 0.5rem;
-    font-weight: 400;
-    font-size: 1rem;
+    /* font-weight: 400;
+    font-size: 1rem; */
     padding: 0.3rem;
     cursor: pointer;
     transition: background 0.2s;
@@ -64,6 +91,13 @@ export const Sidebar = styled.div`
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-family: sans-serif;
+      font-family: "Inter", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-style: normal;
+        
+      
     }
 
     .rightButton {
@@ -80,7 +114,6 @@ export const Sidebar = styled.div`
 
     &:hover {
       background-color: #e2e2e2;
-
       .rightButton {
         opacity: 1;
         pointer-events: auto;
@@ -88,6 +121,7 @@ export const Sidebar = styled.div`
     }
   }
 
+  /* Histórico de Conversas */
   .historico-container {
     margin-top: 0.5rem;
     padding: 0.3rem;
@@ -101,7 +135,7 @@ export const Sidebar = styled.div`
   }
 
   .fonteHistorico {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
   }
 
   .search-icon {
@@ -117,7 +151,12 @@ export const Sidebar = styled.div`
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     padding: 0.5rem 0;
-    list-style: none;
+    font-family: sans-serif;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 0.85rem;
   }
 
   .historico-item {
@@ -128,26 +167,10 @@ export const Sidebar = styled.div`
     font-weight: 300;
   }
 
+  /* Botão Minha Conta */
   .botao-minha-conta {
     text-align: center;
-    background-color: #ffe950;
-    color: #333;
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin: 3rem 0.5rem;
-    font-weight: bold;
-
-    a {
-      text-decoration: none;
-      color: inherit; /* para herdar a cor definida em .botao-minha-conta */
-    }
-
-    &:hover {
-      background-color: #f0c000;
-    }
-
+    margin-top: 4rem;
   }
 
   @media (max-width: 768px) {
@@ -157,7 +180,6 @@ export const Sidebar = styled.div`
   }
 `;
 
-/* Conteúdo Principal */
 export const MainContent = styled.div`
   flex: 1;
   background-color: #fff;
@@ -183,24 +205,30 @@ export const MainContent = styled.div`
   }
 `;
 
-/* Top Bar */
-export const TopBar = styled.div`
-  text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-`;
-
-export const TopBarTitle = styled.span`
-  font-size: 1.875rem;
-  font-weight: 300;
-  font-family: Roboto, sans-serif;
+export const ContainerTextArea = styled.div`
+  padding: 0 20px;
+  margin-top: 10px;
 
   @media (max-width: 768px) {
-    font-size: 1rem;
+    padding: 0;
+    margin-top: 8px;
   }
 `;
 
-/* Mensagem do Usuário (em azul) */
+/* ====================================================
+   Top Bar
+==================================================== */
+export const TopBar = styled.div`
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  display: flex;
+  justify-content: space-between;
+`;
+
+
+/* ====================================================
+   Mensagens de Chat
+==================================================== */
 export const UserMessage = styled.div`
   max-width: 30%;
   margin-right: 1rem;
@@ -218,12 +246,10 @@ export const UserMessage = styled.div`
   font-weight: 300;
 `;
 
-/* Wrapper para envolver as mensagens do Assistente (margin) */
 export const MessageWrapper = styled.div`
-  /* margin: 16px 0; */
+  /* Espaçamento extra para as mensagens, se necessário */
 `;
 
-/* Mensagem do Assistente */
 export const AssistantMessage = styled.div`
   max-width: 80%;
   margin: 0.5rem;
@@ -236,18 +262,9 @@ export const AssistantMessage = styled.div`
   font-weight: 300;
 `;
 
-/* Container para a área do TextArea */
-export const ContainerTextArea = styled.div`
-  padding: 0 20px;
-  margin-top: 10px;
-
-  @media (max-width: 768px) {
-    padding: 0;
-    margin-top: 8px;
-  }
-`;
-
-/* SearchBox e TextArea */
+/* ====================================================
+   Área de Input do Chat
+==================================================== */
 export const SearchBox = styled.div`
   position: relative;
   flex: 1;
@@ -268,7 +285,6 @@ export const SearchBox = styled.div`
 
 export const SearchTextArea = styled.textarea`
   font-family: "Roboto", sans-serif;
-  font-weight: 300;
   font-size: 1.1rem;
   color: #333;
   resize: none;
@@ -325,18 +341,20 @@ export const SmallButton = styled.button`
   }
 `;
 
-/* Modal */
+/* ====================================================
+   Modal
+==================================================== */
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* semi-transparente */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999; /* para ficar acima de tudo */
+  z-index: 9999;
 `;
 
 export const ModalContent = styled.div`
@@ -366,6 +384,7 @@ export const ModalContent = styled.div`
       font-size: 1.1rem;
       cursor: pointer;
       color: #333;
+
       &:hover {
         opacity: 0.7;
       }
@@ -382,6 +401,7 @@ export const ModalContent = styled.div`
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 4px;
+
       &:focus {
         outline: none;
         border-color: #999;
@@ -404,15 +424,59 @@ export const ModalContent = styled.div`
   }
 `;
 
-/* Dicas abaixo do TextArea */
+/* ====================================================
+   Dicas/Informações Adicionais
+==================================================== */
 export const TipContainer = styled.div`
   margin-top: 8px;
   text-align: center;
 `;
 
-export const TipText = styled.p`
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-  font-size: 0.85rem;
-  margin: 0;
+
+// Container que envolve o preview do arquivo
+export const FilePreviewContainer = styled.div`
+  display: flex;
+  gap: 10px;            /* Espaço entre os itens */
+  overflow-x: auto;     /* Barra de rolagem horizontal se exceder a largura */
+  width: 100%;
+  padding-bottom: 1.5rem;         /* Espaço interno opcional */
+  padding-top: 0.7rem;
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
 `;
+
+// Wrapper interno com position relative para posicionar o ícone
+export const PreviewWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+// Imagem com bordas arredondadas
+export const StyledImage = styled.img`
+  border-radius: 12px;
+`;
+
+// Container para exibir o nome do arquivo (quando não é imagem)
+export const FileNameContainer = styled.div`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  word-break: break-word;
+  margin-bottom: 10px;
+`;
+
+// Ícone de fechar, posicionado no canto superior direito
+export const CloseIcon = styled(FaTimes)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  cursor: pointer;
+  color: #fff;
+  background-color: #000;
+  border-radius: 50%;
+  font-size: 12px;
+  padding: 2px;
+`;
+
+

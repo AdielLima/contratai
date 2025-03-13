@@ -3,10 +3,10 @@ import "./styles.css";
 import { useNavigate } from "react-router-dom";
 
 // Endpoints dos Webhooks
-const REGISTRATION_URL = "/webhook-test/7169ecb5-f7ea-43ac-aaaa-2867f2a25e6f";
-const PLAN_URL = "/webhook-test/plano";
-const LOGIN_URL = "/webhook-test/autenticacao";
-const CARD_PAYMENT_URL = "/webhook-test/pagamento-cartao";
+const REGISTRATION_URL = "/webhook/7169ecb5-f7ea-43ac-aaaa-2867f2a25e6f";
+const PLAN_URL = "/webhook/plano";
+const LOGIN_URL = "/webhook/autenticacao";
+const CARD_PAYMENT_URL = "/webhook/pagamento-cartao";
 const PIX_PAYMENT_URL = "https://seu-n8n.com/webhook/pagamento-pix";
 
 export default function Registro({ isOpen, onClose }) {
